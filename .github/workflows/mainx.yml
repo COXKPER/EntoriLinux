@@ -20,6 +20,7 @@ jobs:
 
         git clone https://$USERNAME:$PASSWORD@repo1.serv00.com/git/priv/Builderzun/entori external-repo
         cd external-repo
+        git checkout dev
 
         git remote add github https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
         git fetch github
