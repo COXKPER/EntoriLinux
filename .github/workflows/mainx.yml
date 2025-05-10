@@ -1,0 +1,27 @@
+name: Clone and Push to Dev Branch
+
+on:
+  schedule:
+    - cron: '0 */6 * * *' # Runs every 6 hours (UTC)
+  workflow_dispatch: # (Optional) allows manual run from GitHub UI
+
+jobs:
+  clone-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Clone external private repo
+      env:
+        USERNAME: ${{ secrets.ENTORI_USERNAME }}
+        PASSWORD: ${{ secrets.ENTORI_PASSWORD }}
+      run: |
+        git config --global user.name "GitHub Action"
+        git config --global user.email "action@github.com"
+
+        git clone https://$USERNAME:$PASSWORD@repo1.serv00.com/git/priv/Builderzun/entori external-repo
+        cd external-repo
+
+        git remote add github https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+        git fetch github
+        git checkout -B dev
+        git push github dev --force
